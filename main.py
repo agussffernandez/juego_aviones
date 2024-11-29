@@ -3,7 +3,13 @@ import pygame
 pygame.init()
 pygame.mixer.init()
 
-import sys
+
+from configuraciones.configurar_pantalla import *
+from configuraciones.cargar_imagenes import *
+from configuraciones.redimensionar_imagenes import *
+from configuraciones.reproducir_sonidos import *
+
+
 from variables.constantes import *
 from funciones.mostrar_game_over import *
 from funciones.mover_jugador import *
@@ -13,65 +19,7 @@ from funciones.generar_enemigos import *
 from funciones.mover_enemigos import *
 from funciones.detectar_colisiones import *
 from funciones.actualizar_fondo import *
-
-
-
-def configurar_pantalla():
-    """Configura la pantalla del juego"""
-    screen = pygame.display.set_mode((ANCHO, LARGO))
-    pygame.display.set_caption("Juego prueba")
-    return screen
-
-def cargar_imagenes():
-    """Carga las imágenes necesarias para el juego"""
-    try:
-        jugador_imagen = pygame.image.load("image/avion1.png").convert_alpha()
-        enemigo_imagen = pygame.image.load("image/enemigo1.png").convert_alpha()
-        fondo_imagen = pygame.image.load("image/fondo2.png")
-        fondo_largo = fondo_imagen.get_height()  # Obtiene la altura
-    except FileNotFoundError as e:
-        print(f"Error: No se pudo encontrar el archivo de imagen. {e}")
-        sys.exit(1)
-    
-    return jugador_imagen, enemigo_imagen, fondo_imagen, fondo_largo
-
-
-def redimensionar_imagenes(jugador_imagen, enemigo_imagen):
-    """Redimensiona las imágenes del jugador y enemigo"""
-    jugador_redimension = pygame.transform.scale(jugador_imagen, JUGADOR_REDIMENSION)
-    enemigo_redimension = pygame.transform.scale(enemigo_imagen, ENEMIGO_REDIMENSION)
-    return jugador_redimension, enemigo_redimension
-
-def inicializar_jugador():
-    """Inicializa la posición del jugador"""
-    jugador = pygame.Rect(
-                        ANCHO // 2 - ANCHO_JUGADOR // 2, 
-                        LARGO - ALTO_JUGADOR - 10, ANCHO_JUGADOR,
-                        ALTO_JUGADOR
-                        )
-    return jugador
-
-def reproducir_musica_fondo():
-    try:
-        pygame.mixer.music.load("audio/fondo.mp3")  # Cargar música de fondo
-        pygame.mixer.music.play(loops=-1, start=0.0)  # Reproducir la música de fondo indefinidamente
-    except pygame.error as e:
-        print(f"Error al cargar la música: {e}")
-    
-    # Ajusta el volumen de la música (valor entre 0.0 y 1.0)
-    pygame.mixer.music.set_volume(0.5)  # Ajusta el volumen al 50%
-
-def cargar_sonidos():
-    """Carga los sonidos del juego"""
-    try:
-        sonido_disparo = pygame.mixer.Sound("audio/disparo.mp3")  # Cargar el sonido de disparo
-        sonido_game_over = pygame.mixer.Sound("audio/game_over.mp3")  # Cargar el sonido de Game Over
-    except pygame.error as e:
-        print(f"Error al cargar los sonidos: {e}")
-        sys.exit(1)
-    
-    return sonido_disparo, sonido_game_over
-
+from funciones.inicializar_jugador import *
 
 
 
