@@ -160,7 +160,7 @@ def mover_enemigos(cantidad_enemigos: list) -> None:
             cantidad_enemigos.remove(enemigo)  # Elimina al enemigo de la lista
 
 
-def detectar_colisiones_entre_proyectiles_y_enemigos(puntos: int, proyectiles: list, cantidad_enemigos: list) -> None:
+def detectar_colisiones_entre_proyectiles_y_enemigos(puntos: int, proyectiles: list, cantidad_enemigos: list) -> int:
     """  
     Detecta colisiones entre proyectiles y enemigos, y si es asi:
     -> Se le suman 5 puntos al jugador
@@ -176,6 +176,33 @@ def detectar_colisiones_entre_proyectiles_y_enemigos(puntos: int, proyectiles: l
                 puntos += 5
                 # Luego de encontrar la colision, sale del bucle
                 break
+    return puntos
+
+def actualizar_fondo(fondo1: int, fondo2: int, velocidad_fondo: float) -> tuple[int,int]:
+    
+    # A las pociones verticales(fondo1, fondo2), se le suman 2 pixeles
+    # Con la suma hara que se dezplacen hacia abajo
+    fondo1 += velocidad_fondo
+    fondo2 += velocidad_fondo
+
+    # Pega en la pantalla los fondos y genera el movimiento
+    # Dibuja fondo_imagen en la posicion (x = 0, y=fondo1)
+    # A medida que fondo1 aumenta, la imagen de fondo se mueve hacia abajo en la pantalla.
+    screen.blit(fondo_imagen, (0, fondo1))
+    screen.blit(fondo_imagen, (0, fondo2))
+
+    # Verifica si la posicion en la que este fondo 1 ha llegado o ha pasado la altura de la imagen de fondo(fondo_largo)
+    # Es decir, si el fondo ya paso hacia abajo, salio completamente de la pantalla por la parte inferior, y ya no es visible
+    if fondo1 >= fondo_largo:
+        # Entonces si se ha movido completamente fuera de la pantalla
+        # Actualiza su posición a una negativa en el eje Y
+        # Es decir, actualiza su eje Y justo por encima de la pantalla
+        fondo1 = -fondo_largo
+    if fondo2 >= fondo_largo:
+        fondo2 = -fondo_largo
+    return fondo1, fondo2
+
+
 
 
 
@@ -200,6 +227,7 @@ cantidad_enemigos = []
 proyectiles = []
 
 
+
 #Bucle
 corriendo = True
 
@@ -214,7 +242,7 @@ while corriendo:
     mover_proyectiles(proyectiles)
     generar_enemigos(cantidad_enemigos)
     mover_enemigos(cantidad_enemigos)
-    detectar_colisiones_entre_proyectiles_y_enemigos(puntos, proyectiles, cantidad_enemigos)
+    puntos = detectar_colisiones_entre_proyectiles_y_enemigos(puntos, proyectiles, cantidad_enemigos)
 
     # Terminar el juego si el jugador colisiona con un enemigo
     for enemigo in cantidad_enemigos:
@@ -224,29 +252,11 @@ while corriendo:
     # Llena la pantalla de negro para asegurarse de que no queden imagenes anteriores
     screen.fill(NEGRO)
 
-    # Movimiento de la imagen de fondo
+    # Actualiza el movimiento de la imagen de fondo 
+    fondo1, fondo2 = actualizar_fondo(fondo1, fondo2, velocidad_fondo)
 
-    # A las pociones verticales(fondo1, fondo2), se le suman 2 pixeles
-    # Con la suma hara que se dezplacen hacia abajo
-    fondo1 += velocidad_fondo
-    fondo2 += velocidad_fondo
 
-    # Pega en la pantalla los fondos y genera el movimiento
-    # Dibuja fondo_imagen en la posicion (x = 0, y=fondo1)
-    # A medida que fondo1 aumenta, la imagen de fondo se mueve hacia abajo en la pantalla.
-    screen.blit(fondo_imagen, (0, fondo1))
-    screen.blit(fondo_imagen, (0, fondo2))
-
-    # Verifica si la posicion en la que este fondo 1 ha llegado o ha pasado la altura de la imagen de fondo(fondo_largo)
-    # Es decir, si el fondo ya paso hacia abajo, salio completamente de la pantalla por la parte inferior, y ya no es visible
-    if fondo1 >= fondo_largo:
-        # Entonces si se ha movimo completamente fuera de la pantalla
-        # Actualiza su posición negativa en el eje Y
-        # Es decir, justo por encima de la pantalla
-        fondo1 = -fondo_largo
-    if fondo2 >= fondo_largo:
-        fondo2 = -fondo_largo
-
+    # DIBUJO DE LOS PERSONAJES
 
     #jugador imagen
     # En la pantalla, dibuja la imagen redimensionada sobre el rect del jugador
