@@ -160,6 +160,25 @@ def mover_enemigos(cantidad_enemigos: list) -> None:
             cantidad_enemigos.remove(enemigo)  # Elimina al enemigo de la lista
 
 
+def detectar_colisiones_entre_proyectiles_y_enemigos(puntos: int, proyectiles: list, cantidad_enemigos: list) -> None:
+    """  
+    Detecta colisiones entre proyectiles y enemigos, y si es asi:
+    -> Se le suman 5 puntos al jugador
+    -> El enemigo de elimina
+    """
+    for proyectil in proyectiles[:]:
+        # Recorre 1 indice de proyectiles, recorre todos los objetos de la lista enemigos
+        for enemigo in cantidad_enemigos[:]:
+            # Verifica si el proyectil choco con algún enemigo de la lista cantidad_enemigos
+            if proyectil.colliderect(enemigo):
+                proyectiles.remove(proyectil)
+                cantidad_enemigos.remove(enemigo)
+                puntos += 5
+                # Luego de encontrar la colision, sale del bucle
+                break
+
+
+
 
 # Variables para el juego
 
@@ -195,21 +214,7 @@ while corriendo:
     mover_proyectiles(proyectiles)
     generar_enemigos(cantidad_enemigos)
     mover_enemigos(cantidad_enemigos)
-
-
-    # Detectar colisiones entre proyectiles y enemigos
-    for proyectil in proyectiles[:]:
-        """
-        El bucle recorre todos los proyectiles actuales en la lista proyectiles. 
-        El uso de [:] hace que estemos iterando sobre una copia de la lista, 
-        lo que permite modificar la lista (eliminando elementos) sin causar problemas durante la iteración.
-        """
-        for enemigo in cantidad_enemigos[:]:
-            if proyectil.colliderect(enemigo):  # Si hay colisión entre el disparo y el enemigo
-                proyectiles.remove(proyectil)  # Elimina el proyectil
-                cantidad_enemigos.remove(enemigo)  # Elimina el enemigo
-                puntos += 5  # Aumenta los puntos por eliminar un enemigo
-                break
+    detectar_colisiones_entre_proyectiles_y_enemigos(puntos, proyectiles, cantidad_enemigos)
 
     # Terminar el juego si el jugador colisiona con un enemigo
     for enemigo in cantidad_enemigos:
