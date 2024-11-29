@@ -1,6 +1,7 @@
 import pygame
 
 pygame.init()
+pygame.mixer.init()
 
 import sys
 from variables.constantes import *
@@ -50,6 +51,30 @@ def inicializar_jugador():
                         )
     return jugador
 
+def reproducir_musica_fondo():
+    try:
+        pygame.mixer.music.load("audio/fondo.mp3")  # Cargar música de fondo
+        pygame.mixer.music.play(loops=-1, start=0.0)  # Reproducir la música de fondo indefinidamente
+    except pygame.error as e:
+        print(f"Error al cargar la música: {e}")
+    
+    # Ajusta el volumen de la música (valor entre 0.0 y 1.0)
+    pygame.mixer.music.set_volume(0.5)  # Ajusta el volumen al 50%
+
+def cargar_sonidos():
+    """Carga los sonidos del juego"""
+    try:
+        sonido_disparo = pygame.mixer.Sound("audio/disparo.mp3")  # Cargar el sonido de disparo
+        sonido_game_over = pygame.mixer.Sound("audio/game_over.mp3")  # Cargar el sonido de Game Over
+    except pygame.error as e:
+        print(f"Error al cargar los sonidos: {e}")
+        sys.exit(1)
+    
+    return sonido_disparo, sonido_game_over
+
+
+
+
 
 def main():
     # Configuración inicial
@@ -57,6 +82,11 @@ def main():
     jugador_imagen, enemigo_imagen, fondo_imagen, fondo_largo = cargar_imagenes()
     jugador_redimension, enemigo_redimension = redimensionar_imagenes(jugador_imagen, enemigo_imagen)
     jugador = inicializar_jugador()
+    
+    # Configuracion sonido
+    reproducir_musica_fondo()
+    sonido_disparo, sonido_game_over = cargar_sonidos()
+    
     
     # Variables del juego
     fondo1 = 0  # Posición vertical del primer fondo
@@ -81,7 +111,7 @@ def main():
                 corriendo = False
         
         mover_jugador(jugador)
-        crear_proyectil_con_el_espaciador(proyectiles, jugador)
+        crear_proyectil_con_el_espaciador(proyectiles, jugador, sonido_disparo)
         mover_proyectiles(proyectiles)
         generar_enemigos(cantidad_enemigos)
         mover_enemigos(cantidad_enemigos)
@@ -91,6 +121,7 @@ def main():
         for enemigo in cantidad_enemigos:
             if jugador.colliderect(enemigo):
                 corriendo = False
+                sonido_game_over.play()  # Reproducir el sonido de Game Over al terminar el juego
         
         # Llena la pantalla de negro para asegurarse de que no queden imágenes anteriores
         screen.fill(NEGRO)
@@ -115,6 +146,7 @@ def main():
         
         # Mostrar game over si el juego ha terminado
         if not corriendo:
+            pygame.mixer.music.stop()  # Detener la música de fondo al finalizar el juego
             mostrar_game_over(puntos, screen)
             pygame.time.wait(2000)
             corriendo = False

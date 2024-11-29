@@ -1,6 +1,8 @@
 import pygame
 
-def crear_proyectil_con_el_espaciador(proyectiles: list, jugador):
+
+
+def crear_proyectil_con_el_espaciador(proyectiles: list, jugador: pygame.Rect, sonido_disparo: pygame.mixer.Sound):
     """ 
     Crea un proyectil cuando se aprete la barra espaciadora, luego lo
     agrega a la lista de proyectiles
@@ -16,5 +18,6 @@ def crear_proyectil_con_el_espaciador(proyectiles: list, jugador):
             # 5, 5: Estos son los ancho y alto del proyectil.
             proyectil = pygame.Rect(jugador.centerx - 5, jugador.top, 5, 5)  # Creación del proyectil
             proyectiles.append(proyectil)
+            sonido_disparo.play()  # Reproduce el sonido de disparo
     except Exception as e:
         print(f"Error al crear proyectil: {e}")
