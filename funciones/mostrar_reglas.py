@@ -44,13 +44,12 @@ def mostrar_reglas(screen: pygame.Surface, reglas: dict):
     
     pygame.display.flip()
     
-    # Esperar a que se presione la barra espaciadora para empezar
     esperando = True
     while esperando:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit() # garantiza que Pygame se cierre correctamente y que el programa terminE sin errores.
+                sys.exit() # garantiza que Pygame se cierre correctamente y que el programa termine sin errores.
 
             # Verificar si el evento es un clic del mouuse y si es el izquierdo
             if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:

@@ -29,7 +29,6 @@ def main():
     screen = configurar_pantalla()
     jugador_imagen, enemigo_imagen, fondo_imagen, fondo_largo = cargar_imagenes()
     jugador_redimension, enemigo_redimension = redimensionar_imagenes(jugador_imagen, enemigo_imagen)
-    jugador = inicializar_jugador()
     
     
     # Cargar reglas del juego
@@ -43,6 +42,7 @@ def main():
     
     
     # Variables del juego
+    jugador = inicializar_jugador()
     fondo1 = 0  # Posición vertical del primer fondo
     fondo2 = fondo_largo  # Posición vertical del segundo fondo
     velocidad_fondo = 2  # El fondo se mueve a 2 píxeles hacia abajo
@@ -59,6 +59,9 @@ def main():
     corriendo = True
     
     while corriendo:
+        
+        # Llena la pantalla de negro para asegurarse de que no queden imágenes anteriores
+        screen.fill(NEGRO)
         
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -77,8 +80,6 @@ def main():
                 corriendo = False
                 sonido_game_over.play()  # Reproducir el sonido de Game Over al terminar el juego
         
-        # Llena la pantalla de negro para asegurarse de que no queden imágenes anteriores
-        screen.fill(NEGRO)
         
         # Actualiza el movimiento de la imagen de fondo 
         fondo1, fondo2 = actualizar_fondo(fondo1, fondo2, fondo_largo, fondo_imagen, velocidad_fondo, screen)

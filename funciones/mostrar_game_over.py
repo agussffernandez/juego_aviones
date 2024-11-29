@@ -1,7 +1,7 @@
 import pygame
 from variables.constantes import ANCHO, LARGO, ROJO, BLANCO, NEGRO
 
-def mostrar_game_over(puntos: int, screen) -> None:
+def mostrar_game_over(puntos: int, screen: pygame.Surface) -> None:
     """ 
     Muestra por pantalla 'game over' y los puntos obtenidos del juego.
     Se llena la pantalla de color negro y se dibujan los textos centrados

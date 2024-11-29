@@ -4,6 +4,7 @@ import sys
 def cargar_imagenes():
     """Carga las imágenes necesarias para el juego"""
     try:
+        # convert_alpha(): hace que las imagenes png no aparezcan en blanco
         jugador_imagen = pygame.image.load("image/avion1.png").convert_alpha()
         enemigo_imagen = pygame.image.load("image/enemigo1.png").convert_alpha()
         fondo_imagen = pygame.image.load("image/fondo2.png")
