@@ -20,7 +20,7 @@ from funciones.mover_enemigos import *
 from funciones.detectar_colisiones import *
 from funciones.actualizar_fondo import *
 from funciones.inicializar_jugador import *
-
+from funciones. mostrar_reglas import *
 
 
 
@@ -30,6 +30,12 @@ def main():
     jugador_imagen, enemigo_imagen, fondo_imagen, fondo_largo = cargar_imagenes()
     jugador_redimension, enemigo_redimension = redimensionar_imagenes(jugador_imagen, enemigo_imagen)
     jugador = inicializar_jugador()
+    
+    
+    # Cargar reglas del juego
+    reglas = cargar_reglas()
+    if reglas is not None:
+        mostrar_reglas(screen, reglas)  # Mostrar las reglas antes de comenzar el juego
     
     # Configuracion sonido
     reproducir_musica_fondo()
